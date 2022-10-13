@@ -16,18 +16,21 @@ for number in file.split('\n'):
     rows.append(number.split())
 
 for number in range(0,len(rows[0])):
-    temp = []
+    temp = ['border']
     for row in rows:
         temp.append(row[number])
+    temp.append('border')
     columns.append(temp)
 
 # this determines location and the 3 adjacent
 def location(x,y):
-    number = rows[y][x]
+    number = columns[x][y+1]
     print(f"number in location is {number}")
+    # this will find number
     compare = []
     for number in range(0,3):
-        compare.append(columns[x+1][(y+1) - number])
+        compare.append(columns[x+1][(y) + number])
+
     print(f"{compare}")
 
 
@@ -37,10 +40,10 @@ def location(x,y):
 # TODO Determine the column to right numbers right, right-up, and right-down
 # TODO make position move into that piece 
 
-location(4,4)
-print(file)
-print()
+location(0,0)
 print(columns)
+print()
+# print(columns)
 
 
 # print(new_rows)
