@@ -78,18 +78,11 @@ class Paths:
         path_avg = mean(differences_in_path)
         self.paths.append(path)
         self.path_avg.append(path_avg)
-        # print(path)
-        # print(number_in_path)
-        # print()
-        # print(differences_in_path)
-        # print(f"This path has change of {path_avg}")  
+
     def shortest(self):
         locator = self.path_avg.index(min(self.path_avg))
         self.shortest_path.append(self.paths[locator])
         self.shortest_avg = self.path_avg[locator]
-
-
-# print(file)
 
 y_used = 0
 
@@ -98,8 +91,5 @@ for paths in range(0,len(columns)-2):
     trecker.make_paths(0,y_used)
     y_used += 1
 
-# print(trecker.paths)
-# print(trecker.path_avg)
 trecker.shortest()
-# print(trecker.shortest_path)
 print(f"Path with least elevation change of {round(trecker.shortest_avg)}")
