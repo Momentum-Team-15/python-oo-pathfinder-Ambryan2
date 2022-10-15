@@ -41,7 +41,7 @@ class Paths:
         differences_in_path = []
 
         # loop to go to end of array
-        for justletters in range(0,len(rows)):
+        for justletters in range(0,len(rows)-2):
             # need to make x and y variables reusable
             number = int(columns[x][y+1])
             # this will find number and will need to be repeated
