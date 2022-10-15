@@ -5,7 +5,7 @@ from sqlite3 import Row
 from statistics import mean
 
 # reads file 
-f = open('test.txt', 'r')
+f = open('elevation_small.txt', 'r')
 file = f.read()
 
 # want to split on new line NOTE (new line = y) (new number = x)
@@ -93,3 +93,4 @@ for paths in range(0,len(columns)-2):
 
 trecker.shortest()
 print(f"Path with least elevation change of {round(trecker.shortest_avg)}")
+print(trecker.shortest_path)
