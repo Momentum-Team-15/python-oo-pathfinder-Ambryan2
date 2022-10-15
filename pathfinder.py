@@ -2,6 +2,7 @@ from ast import Compare
 import numbers
 import random
 from sqlite3 import Row
+from statistics import mean
 
 # reads file 
 f = open('test.txt', 'r')
@@ -15,6 +16,9 @@ columns = []
 for number in file.split('\n'):
     rows.append(number.split())
 
+# this is because file has an empty line
+rows.pop()
+
 for number in range(0,len(rows[0])):
     temp = ['border']
     for row in rows:
@@ -22,31 +26,80 @@ for number in range(0,len(rows[0])):
     temp.append('border')
     columns.append(temp)
 
-# this determines location and the 3 adjacent
-def location(x,y):
-    number = columns[x][y+1]
-    print(f"number in location is {number}")
-    # this will find number
-    compare = []
-    for number in range(0,3):
-        compare.append(columns[x+1][(y) + number])
+class Paths:
+    def __init__(self):
+        self.shortest_path = []
+        self.paths = []
+        self.path_avg = []
+        self.shortest_avg = 0
+    
+    def make_paths(self, x, y):
+        number = int(columns[x][y+1])
+        # print(f"number in location is {number}")
+        number_in_path = [number]
+        path = [(x,y)]
+        differences_in_path = []
 
-    print(f"{compare}")
+        # loop to go to end of array
+        for justletters in range(0,len(rows)):
+            # need to make x and y variables reusable
+            number = int(columns[x][y+1])
+            # this will find number and will need to be repeated
+            compare = []
+            for option in range(0,3):
+                compare.append(columns[x+1][(y) + option])
+            #This makes an array with the differences in the found numbers
+            differences = []
+            for value in compare:
+                if value != 'border':
+                    differences.append(int(abs((number) - int(value))))
+                else: 
+                    differences.append(number + 1000)
+            # this pick from the differences array and then returns the location of number
+            y_possible = []
+            count = 0
+
+            # new_y = 0
+            for choices in differences:
+                if choices == min(differences):
+                    y_possible.append(y + count)
+                count += 1
+            # randomly selects location from possible location
+            new_number = random.choice(range(0,len(y_possible)))
+            
+            # gives location of the new number selected
+            x +=  1
+            y = y_possible[new_number]-1
+
+            number_in_path.append(columns[x][y+1])
+            path.append((x,y))
+            differences_in_path.append(min(differences))
+        
+        path_avg = mean(differences_in_path)
+        self.paths.append(path)
+        self.path_avg.append(path_avg)
+        # print(path)
+        # print(number_in_path)
+        # print()
+        # print(differences_in_path)
+        # print(f"This path has change of {path_avg}")  
+    def shortest(self):
+        locator = self.path_avg.index(min(self.path_avg))
+        self.shortest_path.append(self.paths[locator])
+        self.shortest_avg = self.path_avg[locator]
 
 
+# print(file)
 
+y_used = 0
 
-# TODO make an element in first row the starting position
-# TODO Determine the column to right numbers right, right-up, and right-down
-# TODO make position move into that piece 
+trecker = Paths()
+for paths in range(0,len(columns)-2):
+    trecker.make_paths(0,y_used)
+    y_used += 1
 
-location(0,0)
-print(columns)
-print()
-# print(columns)
-
-
-# print(new_rows)
-# print(row_length)
-# example for loop
-# [letter for letter in file]
+# print(trecker.paths)
+# print(trecker.path_avg)
+trecker.shortest()
+# print(trecker.shortest_path)
+print(f"Path with least elevation change of {round(trecker.shortest_avg)}")
